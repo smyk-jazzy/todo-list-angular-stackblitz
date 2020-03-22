@@ -84,8 +84,8 @@ export class AppComponent implements OnInit {
  }
 
   addTask(taskName: string, taskDeadline: string) {
-    console.log('taskName: ' + this.taskName);
-    console.log('taskDate: ' + this.taskDate);
+    console.log('taskName: ' + taskName);
+    console.log('taskDate: ' + taskDeadline);
     if (taskDeadline.trim() === ''){
         taskDeadline = new Date().toString();
     }
