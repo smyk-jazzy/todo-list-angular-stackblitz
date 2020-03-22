@@ -14,7 +14,7 @@
         taskDeadline.value = ''
       "
     >
-      Dodaj zadanie 
+      Dodaj zadanie
     </button>
 
     <button class="btn col s2 offset-s10 ml-5" (click)="createTask()">
@@ -66,8 +66,8 @@
       <span class="col s10">
         {{ i + 1 }}. [{{ item.deadline | date: 'yyyy-MM-dd EEEEEE':'':'pl' }}] -
         {{ item.name }}
-        <span *ngIf="first"> first</span>
-        <span *ngIf="last"> last</span>
+        <span *ngIf="first"> [first]</span>
+        <span *ngIf="last"> [last]</span>
       </span>
       <div class="col s2 right-align">
         <button class="btn-floating btn-small red">
