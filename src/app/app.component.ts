@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
 
   initConfig() {
     this.config = {
-      title: 'Lista zadań Smyka',
+      title: 'Zadania Smyka',
       footer:
         '© Lista zadań, All rights reserved (4400: todo-list-udemy-master 2).',
       date: new Date(),
