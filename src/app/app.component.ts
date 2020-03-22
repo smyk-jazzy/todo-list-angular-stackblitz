@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
     this.config = {
       title: 'Lista zadań Smyka',
       footer:
-        '© Lista zadań, All rights reserved (4300: todo-list-udemy-master 2).',
+        '© Lista zadań, All rights reserved (4400: todo-list-udemy-master 2).',
       date: new Date(),
     };
   }
