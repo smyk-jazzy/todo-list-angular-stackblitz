@@ -9,10 +9,11 @@ import { ReversePipe } from 'ngx-pipes';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  editMode = false;
   cleanLabelStr = 'Wyczyść wszystkie';
   config: { [key: string]: string | Date } = null;
   taskName = 'domyślne zadanie';
-  taskDate = '';
+  taskDeadline = '';
   tasks: Task[] = [
     {
       name: 'Spacer z kotem Sylwestrem',
@@ -35,7 +36,11 @@ export class AppComponent implements OnInit {
       done: false,
     },
   ];
-  inputTest = 'pusto';
+  prevTaskName = '';
+
+  // tmp
+  divStatus = true;
+
   constructor() {
     // symulacja ładowania danych z opóźnieniem
     setTimeout(() => this.initConfig(), 2000);
@@ -43,8 +48,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
+    // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    // Add 'implements OnInit' to the class.
     this.sortTasks();
   }
 
@@ -57,7 +62,7 @@ export class AppComponent implements OnInit {
     };
   }
 
-  //getter - typescript
+  // getter - typescript
   get cleanLabel(): string {
     return this.cleanLabelStr;
   }
@@ -68,20 +73,14 @@ export class AppComponent implements OnInit {
 
   onKeyUp(event: KeyboardEvent) {
     const target = event.target as HTMLInputElement;
-    this.inputTest = target.value;
+    this.prevTaskName = target.value;
   }
 
-  newTask(taskName: HTMLInputElement, taskDeadline : HTMLInputElement) {
-    this.addTask(taskName.value, taskDeadline.value);
-    taskName.value = '';
-    taskDeadline.value = '';
+  newTask() {
+    this.addTask(this.taskName, this.taskDeadline);
+    this.taskName = '';
+    this.taskDeadline = '';
   }
-
- createTask() {
-  this.addTask(this.taskName, this.taskDate);
-  this.taskName = 'dodano 2';
-  this.taskDate = '2019-11-29';
- }
 
   addTask(taskName: string, taskDeadline: string) {
     console.log('taskName: ' + taskName);
@@ -105,5 +104,14 @@ export class AppComponent implements OnInit {
     return first.deadline.localeCompare(second.deadline);
   }
 
-  //*ngFor="let item of (tasks | orderBy: 'deadline'); let i = index; let first = first; let last = last"
+
+  changeDivStatus(){
+    this.divStatus = !this.divStatus;
+  }
+
+   switchEditMode(){
+     this.editMode = !this.editMode;
+   }
+
+  // *ngFor="let item of (tasks | orderBy: 'deadline'); let i = index; let first = first; let last = last"
 }
