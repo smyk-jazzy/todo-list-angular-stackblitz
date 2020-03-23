@@ -8,7 +8,7 @@
 
 .done {
   color: silver;
-  text-decoration: line-through;
+  /* text-decoration: line-through; */
 }
 
 input[type='date'].disabled::-webkit-inner-spin-button {

@@ -53,7 +53,6 @@
         +
       </button>
 
-
     </div>
     <div>Prev task name: {{ prevTaskName }}</div>
 
@@ -63,15 +62,16 @@
 
   <ng-template #taskList >
     <ul class="collection" >
-      <li
+      <ng-container
         *ngFor="
           let item of tasks;
           let i = index;
           let first = first;
           let last = last
         "
-        class="collection-item row"
+        [ngSwitch]="item.done"
       >
+      <li class="collection-item row" *ngSwitchCase="false">
         <span class="col s10">
           {{ i + 1 }}. [{{ item.deadline | date: "yyyy-MM-dd EEEEEE":"":"pl" }}] -
           {{ item.name }}
@@ -80,14 +80,25 @@
           <span *ngIf="first && last"> [first and last] </span>
         </span>
         <div class="col s2 right-align">
-          <button class="btn-floating btn-small red">
+          <button class="btn-floating btn-small red"
+          (click)="deleteTask(item)">
             <i class="material-icons">delete</i>
           </button>
           <button class="btn-floating btn-small green ml-5">
-            <i class="material-icons">check</i>
+            <i class="material-icons"
+            (click)="markTaskAsDone(item)" >check</i>
           </button>
         </div>
       </li>
+      <li class="collection-item row" *ngSwitchCase="true" >
+        <span class="col done">
+          [{{ item.deadline | date: "yyyy-MM-dd EEEEEE":"":"pl" }}] - {{item.name}} </span>
+        <button class="btn-floating btn-small red"
+        (click)="deleteTask(item)">
+          <i class="material-icons">delete</i>
+        </button>
+      </li>
+      </ng-container>
     </ul>
   </ng-template>
 
@@ -125,6 +136,7 @@
 
     <ng-container
       *ngIf="divStatus; then thenTemplate; else elseTemplate">
+      czy tu mogę umieszczać dowolne elementy???
     </ng-container>
     <ng-template #thenTemplate>
       <div>
@@ -139,5 +151,20 @@
 
     <button (click)="changeDivStatus()">Change div status</button>
   </div>
+
+  <h2>Switch</h2>
+  <input [(ngModel)]="day" />
+
+  <ng-container  [ngSwitch]="day">
+    <span *ngSwitchCase=1>Poniedziałek</span>
+    <span *ngSwitchCase=2>Wtorek</span>
+    <span *ngSwitchCase=3>Środa</span>
+    <span *ngSwitchCase=4>Czwiartek</span>
+    <span *ngSwitchCase=5>Piątek</span>
+    <span *ngSwitchCase=6>Sobota</span>
+    <span *ngSwitchCase=7>Niedziela</span>
+    <span *ngSwitchDefault>8. dzień tygodania</span>
+  </ng-container>
+
 
 </div>
