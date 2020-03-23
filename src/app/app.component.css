@@ -20,3 +20,7 @@ input[type='date'].disabled::-webkit-inner-spin-button {
   height: 500px;
   max-height: 500px;
 }
+
+.hidden {
+  visibility: hidden;
+}

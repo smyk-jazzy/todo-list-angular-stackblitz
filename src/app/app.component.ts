@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Task } from './task';
-import { OrderByPipe } from 'ngx-pipes';
-import { ReversePipe } from 'ngx-pipes';
 
 @Component({
   selector: 'app-root',
@@ -10,13 +8,13 @@ import { ReversePipe } from 'ngx-pipes';
 })
 export class AppComponent implements OnInit {
 
-
   editMode = false;
   cleanLabelStr = 'Wyczyść wszystkie';
   config: { [key: string]: string | Date } = null;
-  taskName = 'domyślne zadanie';
+
+  taskName = '';
   taskDeadline = '';
-  day = 1;
+
   tasks: Task[] = [
     {
       name: 'Spacer z kotem Sylwestrem',
@@ -39,37 +37,24 @@ export class AppComponent implements OnInit {
       done: false,
     },
   ];
-  prevTaskName = '';
 
-  // tmp
-  divStatus = true;
-
-  // compareBoolean = (first: boolean, second: boolean) :number => {
-  //   return first === second ? 0 : (first ? 1 : -1);
-  // }
-
-  compareBoolean (first: boolean, second: boolean) :number {
-    return first === second ? 0 : (first ? 1 : -1);
-  }
   constructor() {
     // symulacja ładowania danych z opóźnieniem
     setTimeout(() => this.initConfig(), 2000);
     console.log(this.tasks);
   }
 
-  ngOnInit(): void {
-    // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    // Add 'implements OnInit' to the class.
-    this.sortTasks();
-  }
-
   initConfig() {
     this.config = {
       title: 'Zadania Smyka',
-      footer:
-        '© Lista zadań, All rights reserved (4400: todo-list-udemy-master 2).',
+      footer: '© Lista zadań, All rights reserved (4300).',
       date: new Date(),
     };
+  }
+
+  ngOnInit(): void {
+    // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    this.sortTasks();
   }
 
   // getter - typescript
@@ -81,10 +66,9 @@ export class AppComponent implements OnInit {
     this.tasks = [];
   }
 
-  onKeyUp(event: KeyboardEvent) {
-    const target = event.target as HTMLInputElement;
-    this.prevTaskName = target.value;
-  }
+  switchEditMode(){
+    this.editMode = !this.editMode;
+ }
 
   newTask() {
     this.addTask(this.taskName, this.taskDeadline);
@@ -93,11 +77,7 @@ export class AppComponent implements OnInit {
   }
 
   addTask(taskName: string, taskDeadline: string) {
-    console.log('taskName: ' + taskName);
-    console.log('taskDate: ' + taskDeadline);
-    if (taskDeadline.trim() === ''){
-        taskDeadline = new Date().toString();
-    }
+    console.log('taskName: %s, taskDate: %s', taskName, taskDeadline);
     this.tasks.push({
       name: taskName,
       deadline: taskDeadline,
@@ -111,12 +91,7 @@ export class AppComponent implements OnInit {
       (first,second) => this.compareTasks(first,second))
   }
 
-
-
-
   compareTasks(first: Task, second: Task): number {
-    // const booleanComparison = first.done === second.done ? 0 : (first.done ? 1 : -1)
-    //this.compareBoolean; let fun = this.compareBoolean;
     const booleanComparison = this.compareBoolean(first.done, second.done);
     if (booleanComparison === 0)    {
     return first.deadline.localeCompare(second.deadline);
@@ -124,29 +99,26 @@ export class AppComponent implements OnInit {
       return booleanComparison;}
   }
 
-
-
-  changeDivStatus(){
-    this.divStatus = !this.divStatus;
-  }
-
-
-  switchEditMode(){
-     this.editMode = !this.editMode;
+  compareBoolean (first: boolean, second: boolean) :number {
+    return first === second ? 0 : (first ? 1 : -1);
   }
 
   markTaskAsDone(task: Task){
-    console.log("TaskAsDone: %o", task);
+    console.log("markskAsDone: %o", task);
     task.done = true;
     this.sortTasks();
   }
 
   deleteTask(task: Task)  {
-    console.log("DeleteTask: %o", task);
-    const index = this.tasks.findIndex(t => task===t);
-    this.tasks.splice(index, 1);
-    //this.tasks = this.tasks.filter(t => t !==task);
+    console.log("deleteTask: %o", task);
+    this.tasks = this.tasks.filter(t => t !== task);
+    this.sortTasks();
   }
 
-  // *ngFor="let item of (tasks | orderBy: 'deadline'); let i = index; let first = first; let last = last"
+  tasksToJsonFormat() :string {
+    const json = JSON.stringify(this.tasks, null, '  ');
+    console.log(json);
+    return json;
+  }
+
 }

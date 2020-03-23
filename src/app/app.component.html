@@ -1,45 +1,39 @@
 <div class="container">
-
   <nav class="row">
     <div class="nav-wrapper">
       <span class="brand-logo center">{{ config?.title | uppercase }}</span>
     </div>
   </nav>
 
-  <div class="col" >
-
-    <ng-container *ngIf="editMode; then editOn; else editOff">
-    </ng-container>
+  <div class="col">
+    <ng-container *ngIf="editMode; then editOn; else editOff"> </ng-container>
 
     <ng-template #editOff>
-      <button class="btn col s2 offset-s10 ml-5"
-        (click)="switchEditMode()">
+      <button class="btn col s2 offset-s10 ml-5" (click)="switchEditMode()">
         Dodaj zadanie
       </button>
     </ng-template>
 
     <ng-template #editOn>
-      <button class="btn col s2 offset-s10 ml-5"
-        (click)="switchEditMode()">
+      <button class="btn col s2 offset-s10 ml-5" (click)="switchEditMode()">
         Zakończ dodawanie
       </button>
     </ng-template>
-
   </div>
 
   <ng-container *ngIf="editMode">
-    <div class="row"  >
-      <input #taskNameLabel
+    <div class="row">
+      <input
+        #taskNameLabel
         class="col s8"
         type="text"
         placeholder="Dodaj zadanie i datę wykonania"
-        (keyup)="onKeyUp($event)"
         [(ngModel)]="taskName"
       />
-      <input #taskDeadlineLabel
+      <input
+        #taskDeadlineLabel
         class="col s2 disabled"
         type="date"
-        (input)="(0)"
         [(ngModel)]="taskDeadline"
       />
       <button
@@ -52,16 +46,15 @@
       >
         +
       </button>
-
     </div>
-    <div>Prev task name: {{ prevTaskName }}</div>
-
   </ng-container>
-  <br>
-  <ng-container *ngIf="tasks.length > 0; then taskList; else noTasks"></ng-container>
 
-  <ng-template #taskList >
-    <ul class="collection" >
+  <br />
+  <ng-container *ngIf="tasks.length > 0; then taskList; else noTasks">
+  </ng-container>
+
+  <ng-template #taskList>
+    <ul class="collection">
       <ng-container
         *ngFor="
           let item of tasks;
@@ -71,33 +64,48 @@
         "
         [ngSwitch]="item.done"
       >
-      <li class="collection-item row" *ngSwitchCase="false">
-        <span class="col s10">
-          {{ i + 1 }}. [{{ item.deadline | date: "yyyy-MM-dd EEEEEE":"":"pl" }}] -
-          {{ item.name }}
-          <span *ngIf="first && !last"> [first]</span>
-          <span *ngIf="last && !first"> [last] </span>
-          <span *ngIf="first && last"> [first and last] </span>
-        </span>
-        <div class="col s2 right-align">
-          <button class="btn-floating btn-small red"
-          (click)="deleteTask(item)">
-            <i class="material-icons">delete</i>
-          </button>
-          <button class="btn-floating btn-small green ml-5">
-            <i class="material-icons"
-            (click)="markTaskAsDone(item)" >check</i>
-          </button>
-        </div>
-      </li>
-      <li class="collection-item row" *ngSwitchCase="true" >
-        <span class="col done">
-          [{{ item.deadline | date: "yyyy-MM-dd EEEEEE":"":"pl" }}] - {{item.name}} </span>
-        <button class="btn-floating btn-small red"
-        (click)="deleteTask(item)">
-          <i class="material-icons">delete</i>
-        </button>
-      </li>
+        <li class="collection-item row" *ngSwitchCase="false">
+          <span class="col s10">
+            {{ i + 1 }}. [{{
+              item.deadline | date: "yyyy-MM-dd EEEEEE":"":"pl"
+            }}] -
+            {{ item.name }}
+            <span *ngIf="first && !last"> [first]</span>
+            <span *ngIf="last && !first"> [last] </span>
+            <span *ngIf="first && last"> [first and last] </span>
+          </span>
+          <div class="col s2 right-align">
+            <button
+              class="btn-floating btn-small red"
+              (click)="deleteTask(item)"
+            >
+              <i class="material-icons">delete</i>
+            </button>
+            <button class="btn-floating btn-small green ml-5">
+              <i class="material-icons" (click)="markTaskAsDone(item)">check</i>
+            </button>
+          </div>
+        </li>
+        <li class="collection-item row" *ngSwitchCase="true">
+          <span class="col done s10">
+            {{ i + 1 }}. [{{
+              item.deadline | date: "yyyy-MM-dd EEEEEE":"":"pl"
+            }}] - {{ item.name }}
+          </span>
+          <div class="col s2 right-align">
+            <button
+              class="btn-floating btn-small red"
+              (click)="deleteTask(item)"
+            >
+              <i class="material-icons">delete</i>
+            </button>
+
+            <button class="btn-floating btn-small green ml-5 hidden ">
+              <i class="material-icons" >check</i>
+            </button>
+
+          </div>
+        </li>
       </ng-container>
     </ul>
   </ng-template>
@@ -106,11 +114,11 @@
     <h4>Brak zadań</h4>
   </ng-template>
 
-
   <button
     class="btn red"
     (click)="cleanTasks()"
-    [disabled]="tasks.length === 0" >
+    [disabled]="tasks.length === 0"
+  >
     {{ cleanLabel }}
   </button>
 
@@ -125,46 +133,9 @@
   <br />
 
   <div>
-    tasks:
-    <br />
-    {{ tasks | json }}
+    Tasks:
+    <pre contenteditable="true">{{ tasksToJsonFormat() }}</pre>
+    <!-- <pre contenteditable="true">{{ tasks | json }}</pre> -->
   </div>
-  <p ng-non-bindable>{{ "reverse" | reverse }}</p>
-  <br />
-
-  <div>
-
-    <ng-container
-      *ngIf="divStatus; then thenTemplate; else elseTemplate">
-      czy tu mogę umieszczać dowolne elementy???
-    </ng-container>
-    <ng-template #thenTemplate>
-      <div>
-        <b>divStatus = 'true'</b>
-      </div>
-    </ng-template>
-    <ng-template #elseTemplate>
-      <div>
-        <i>divStatus = 'false'</i>
-      </div>
-    </ng-template>
-
-    <button (click)="changeDivStatus()">Change div status</button>
-  </div>
-
-  <h2>Switch</h2>
-  <input [(ngModel)]="day" />
-
-  <ng-container  [ngSwitch]="day">
-    <span *ngSwitchCase=1>Poniedziałek</span>
-    <span *ngSwitchCase=2>Wtorek</span>
-    <span *ngSwitchCase=3>Środa</span>
-    <span *ngSwitchCase=4>Czwiartek</span>
-    <span *ngSwitchCase=5>Piątek</span>
-    <span *ngSwitchCase=6>Sobota</span>
-    <span *ngSwitchCase=7>Niedziela</span>
-    <span *ngSwitchDefault>8. dzień tygodania</span>
-  </ng-container>
-
 
 </div>
